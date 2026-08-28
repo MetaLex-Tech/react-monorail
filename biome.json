@@ -1,0 +1,70 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
+  "files": {
+    "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "quoteStyle": "double"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "style": {
+        "noNonNullAssertion": "off",
+        "useTemplate": "off",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error"
+      },
+      "suspicious": {
+        "noExplicitAny": "info",
+        "noArrayIndexKey": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off",
+        "useKeyWithClickEvents": "off",
+        "noSvgWithoutTitle": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUnknownAtRules": "off"
+          }
+        }
+      }
+    }
+  ]
+}

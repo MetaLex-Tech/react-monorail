@@ -1,0 +1,24 @@
+@import "../src/styles.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: rgb(var(--brand-black-900));
+  color: rgb(var(--brand-white));
+  -webkit-font-smoothing: antialiased;
+}
+
+button:focus-visible {
+  outline: 2px solid rgb(var(--highlight-500) / 0.7);
+  outline-offset: 2px;
+}

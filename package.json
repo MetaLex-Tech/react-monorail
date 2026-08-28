@@ -1,0 +1,92 @@
+{
+  "name": "react-monorail",
+  "version": "0.1.0",
+  "description": "A segmented, overlapping rail of expandable cars for React. Click, hover, and watch inactive cars collapse while the active one grows.",
+  "keywords": [
+    "react",
+    "component",
+    "ui",
+    "segmented-control",
+    "tabs",
+    "monorail",
+    "expandable",
+    "animation"
+  ],
+  "license": "MIT",
+  "author": "MetaLeX Labs, Inc.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MetaLex-Tech/react-monorail.git"
+  },
+  "homepage": "https://github.com/MetaLex-Tech/react-monorail#readme",
+  "bugs": {
+    "url": "https://github.com/MetaLex-Tech/react-monorail/issues"
+  },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./src/styles.css",
+    "./tailwind-preset": {
+      "types": "./dist/tailwind-preset.d.ts",
+      "import": "./dist/tailwind-preset.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check . && tsc --noEmit",
+    "format": "biome check --write ."
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^3.4.0"
+  },
+  "dependencies": {
+    "augmented-ui": "^2.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.5.0",
+    "jotai": "^2.15.0",
+    "tailwind-merge": "^2.4.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.7",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.19",
+    "jsdom": "^26.1.0",
+    "lucide-react": "^0.511.0",
+    "postcss": "^8.4.40",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^3.4.9",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

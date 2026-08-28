@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+
+# build
+dist
+*.tsbuildinfo
+
+# vite
+demo/dist
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env
+.env
+.env*.local
+
+# editors / OS
+.DS_Store
+.vscode
+.idea
+*.pem
+
+# test / coverage
+coverage
