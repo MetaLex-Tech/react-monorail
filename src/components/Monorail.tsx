@@ -13,6 +13,7 @@ import {
   type PropsWithChildren,
   type ReactElement,
   type ReactNode,
+  useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -30,6 +31,7 @@ const hoveredIndexAtom = atom<number | null>(null);
 
 type MonorailProps = {
   className?: string;
+  style?: React.CSSProperties;
   /** MonorailCar should be passed as children. NOTE: They can not be abstracted into components, they need to be passed as direct children. */
   children:
     | ReactElement<MonorailCarProps>
@@ -50,6 +52,7 @@ type MonorailProps = {
  */
 export const Monorail: React.FC<MonorailProps> = ({
   className,
+  style,
   children,
   initialActiveIndex: defaultActiveIndex = 0,
   activeIndex: controlledActiveIndex,
@@ -83,6 +86,7 @@ export const Monorail: React.FC<MonorailProps> = ({
     <Provider>
       <div
         className={cn("monorail flex flex-row items-center gap-0.5", className)}
+        style={style}
       >
         {childrenWithIndices}
       </div>
@@ -118,7 +122,6 @@ export type MonorailCarProps = {
   onActiveIndexChange?: (index: number) => void;
   onClick?: (index: number) => void;
   activeIndex?: number;
-  size?: "default" | "large";
   style?: HTMLAttributes<HTMLDivElement>["style"];
 };
 
@@ -146,19 +149,33 @@ const ActiveIndexUpdater = ({
  * states.
  */
 
+const BASE_CAR_HEIGHT_PX = 28;
+
+/** Right-side chevron clip vars, scaled from the 28px base height. */
+export function augRightClipVars(heightPx: number): React.CSSProperties {
+  const height = heightPx > 0 ? heightPx : BASE_CAR_HEIGHT_PX;
+  const extra = height - BASE_CAR_HEIGHT_PX;
+  const inset = 4 + extra * 0.5;
+  return {
+    "--aug-tr-inset1": `${inset}px`,
+    "--aug-br-inset2": `${inset}px`,
+    "--aug-tr1-width": "6px",
+    "--aug-br1-width": "6px",
+    "--aug-br1-height": "5px",
+    "--aug-tr1-height": "5px",
+  } as React.CSSProperties;
+}
+
 const monorailCarVariants = cva(
   cn(
     "relative appearance-none min-w-4 px-2 py-[1px]",
     "-ml-1.5 pl-[14px]",
+    "h-[28px] text-xs",
     "bg-[rgb(var(--monorail-bg))]",
     "[--aug-border-all:2px] [--aug-border-bg:rgb(var(--monorail-bg))]",
   ),
   {
     variants: {
-      size: {
-        default: "h-[28px] text-xs",
-        large: "h-[34px] text-sm",
-      },
       transitions: {
         true: "transition-colors",
       },
@@ -170,7 +187,7 @@ const monorailCarVariants = cva(
         middle: "",
         first:
           "rounded-l-[4px] pr-[4px] ml-0 pl-[8px] [--aug-tl1:4px] [--aug-bl1:4px]",
-        last: "rounded-r-[4px] pr-[4px] [--aug-tr1:4px] [--aug-br1:4px]",
+        last: "rounded-r-[4px] pr-[6px] [--aug-tr1:4px] [--aug-br1:4px]",
         single: "rounded-[4px] pr-[0px] pl-[8px] ml-0",
       },
       active: {
@@ -185,37 +202,17 @@ const monorailCarVariants = cva(
       },
       {
         hasIcon: true,
-        position: "middle",
+        position: ["last", "middle"],
         className: "!pl-2",
       },
       {
-        position: ["first", "middle"],
-        size: "default",
-        className:
-          "[--aug-tr-inset1:4px] [--aug-br-inset2:4px] [--aug-tr1-width:6px] [--aug-br1-width:6px] [--aug-br1-height:5px] [--aug-tr1-height:5px]",
-      },
-      {
         position: ["last", "middle"],
-        size: "default",
-        className:
-          "[--aug-l1-width:6px] [--aug-l2-width:6px] [--aug-l1-height:5px] [--aug-l2-height:5px]  [--aug-l-extend1:12px]",
-      },
-      {
-        position: ["first", "middle"],
-        size: "large",
-        className:
-          "[--aug-tr-inset1:7px] [--aug-br-inset2:7px] [--aug-tr1-width:6px] [--aug-br1-width:6px] [--aug-br1-height:6px] [--aug-tr1-height:6px]",
-      },
-      {
-        position: ["last", "middle"],
-        size: "large",
         className:
           "[--aug-l1-width:6px] [--aug-l2-width:6px] [--aug-l1-height:5px] [--aug-l2-height:5px] [--aug-l-extend1:12px]",
       },
     ],
     defaultVariants: {
       position: "middle",
-      size: "default",
       active: false,
       hasIcon: false,
     },
@@ -244,7 +241,6 @@ export const MonorailCar = forwardRef<
       onActiveIndexChange,
       onClick,
       activeIndex: controlledActiveIndex,
-      size,
       style,
     },
     ref,
@@ -252,6 +248,39 @@ export const MonorailCar = forwardRef<
     const [activeIndex, setActiveIndex] = useAtom(activeIndexAtom);
     const [hoveredIndex, setHoveredIndex] = useAtom(hoveredIndexAtom);
     const isControlled = controlledActiveIndex !== undefined;
+    const carRef = useRef<HTMLDivElement | HTMLButtonElement | null>(null);
+    const [height, setHeight] = useState(BASE_CAR_HEIGHT_PX);
+
+    const setCarRef = useCallback(
+      (node: HTMLDivElement | HTMLButtonElement | null) => {
+        carRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
+
+    useLayoutEffect(() => {
+      const el = carRef.current;
+      if (!el) {
+        return;
+      }
+
+      const updateHeight = () => {
+        const next = el.getBoundingClientRect().height;
+        setHeight(next > 0 ? next : BASE_CAR_HEIGHT_PX);
+      };
+
+      updateHeight();
+      const observer = new ResizeObserver(updateHeight);
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, [isButton]);
+
+    const rightClipStyle = useMemo(() => augRightClipVars(height), [height]);
 
     const itemState = useMemo(
       () => ({
@@ -301,7 +330,6 @@ export const MonorailCar = forwardRef<
           [`${activeClassName}`]:
             itemState.isActive || (hasHoverEffect && itemState.isHovered),
           transitions: !disableTransitions,
-          size,
         }),
         className,
       ),
@@ -312,7 +340,7 @@ export const MonorailCar = forwardRef<
         ${isLast && !isSingle && "tr-round br-round"}`,
       "data-active": itemState.isActive,
       "data-hovered": itemState.isHovered,
-      style,
+      style: { ...rightClipStyle, ...style },
       onMouseEnter: () => setHoveredIndex(index!),
       onMouseLeave: () => setHoveredIndex(null),
     };
@@ -330,7 +358,7 @@ export const MonorailCar = forwardRef<
 
     if (!isButton) {
       return (
-        <div {...elementProps} ref={ref as React.Ref<HTMLDivElement>}>
+        <div {...elementProps} ref={setCarRef as React.Ref<HTMLDivElement>}>
           <MonorailContent {...monorailContentProps}>
             {children(itemState)}
           </MonorailContent>
@@ -341,7 +369,7 @@ export const MonorailCar = forwardRef<
     return (
       <button
         {...elementProps}
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={setCarRef as React.Ref<HTMLButtonElement>}
         type="button"
         onClick={handleButtonClick}
       >

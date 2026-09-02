@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { Monorail, MonorailCar } from "react-monorail";
 import { describe, expect, it, vi } from "vitest";
+import { augRightClipVars } from "../src/components/Monorail";
 
 function railButtons(container: HTMLElement) {
   return within(container).getAllByRole("button");
@@ -155,15 +156,27 @@ describe("Monorail", () => {
     ).toBeInTheDocument();
   });
 
-  it("applies large size classes", () => {
+  it("defaults to 28px height and xs type", () => {
     const { container } = render(
       <Monorail>
-        <MonorailCar size="large">{() => "Large"}</MonorailCar>
+        <MonorailCar>{() => "Car"}</MonorailCar>
       </Monorail>,
     );
 
-    expect(railButtons(container)[0].className).toContain("h-[34px]");
+    expect(railButtons(container)[0].className).toContain("h-[28px]");
+    expect(railButtons(container)[0].className).toContain("text-xs");
+  });
+
+  it("lets className override height and type size", () => {
+    const { container } = render(
+      <Monorail>
+        <MonorailCar className="h-[38px] text-sm">{() => "Tall"}</MonorailCar>
+      </Monorail>,
+    );
+
+    expect(railButtons(container)[0].className).toContain("h-[38px]");
     expect(railButtons(container)[0].className).toContain("text-sm");
+    expect(railButtons(container)[0].className).not.toContain("h-[28px]");
   });
 
   it("sets augmented-ui mixins for first, middle, last, and single cars", () => {
@@ -229,5 +242,44 @@ describe("Monorail", () => {
     expect(
       within(container).getByRole("button", { name: "Beta" }),
     ).toHaveAttribute("data-active", "true");
+  });
+});
+
+describe("augRightClipVars", () => {
+  it("matches the 28px base clip", () => {
+    expect(augRightClipVars(28)).toMatchObject({
+      "--aug-tr-inset1": "4px",
+      "--aug-br-inset2": "4px",
+      "--aug-tr1-width": "6px",
+      "--aug-br1-width": "6px",
+      "--aug-br1-height": "5px",
+      "--aug-tr1-height": "5px",
+    });
+  });
+
+  it("matches the 38px clip", () => {
+    expect(augRightClipVars(38)).toMatchObject({
+      "--aug-tr-inset1": "9px",
+      "--aug-br-inset2": "9px",
+      "--aug-tr1-width": "6px",
+      "--aug-br1-width": "6px",
+      "--aug-br1-height": "5px",
+      "--aug-tr1-height": "5px",
+    });
+  });
+
+  it("extrapolates inset at 50px and keeps clip height at 5px", () => {
+    expect(augRightClipVars(50)).toMatchObject({
+      "--aug-tr-inset1": "15px",
+      "--aug-br-inset2": "15px",
+      "--aug-tr1-width": "6px",
+      "--aug-br1-width": "6px",
+      "--aug-br1-height": "5px",
+      "--aug-tr1-height": "5px",
+    });
+  });
+
+  it("falls back to the 28px base when height is 0", () => {
+    expect(augRightClipVars(0)).toEqual(augRightClipVars(28));
   });
 });

@@ -8,15 +8,9 @@ import {
   Settings2,
   User,
 } from "lucide-react";
-import { type ReactElement, type ReactNode, useState } from "react";
-import { Monorail, MonorailCar, type MonorailCarProps } from "react-monorail";
+import { type ReactNode, useState } from "react";
+import { Monorail, MonorailCar } from "react-monorail";
 import { cn } from "../src/lib/cn";
-
-const phases = [
-  { key: "one", label: "Phase 1", value: "12 items" },
-  { key: "two", label: "Phase 2", value: "8 items" },
-  { key: "three", label: "Phase 3", value: "4 items" },
-] as const;
 
 const statusExamples = [
   { key: "empty", active: [] as string[] },
@@ -27,11 +21,6 @@ const statusExamples = [
 
 export function Gallery() {
   const [controlledIndex, setControlledIndex] = useState(0);
-  const [activePhaseKey, setActivePhaseKey] = useState("two");
-
-  const activePhaseIndex = phases.findIndex(
-    (car) => car.key === activePhaseKey,
-  );
 
   return (
     <div className="flex flex-col gap-12">
@@ -46,7 +35,7 @@ export function Gallery() {
               (itemState.isActive || itemState.isHovered) && "Design"
             }
           </MonorailCar>
-          <MonorailCar icon={<FileText size={14} />}>
+          <MonorailCar icon={<Rocket size={14} />}>
             {(itemState) =>
               (itemState.isActive || itemState.isHovered) && "Build"
             }
@@ -65,18 +54,10 @@ export function Gallery() {
       >
         <Monorail>
           <MonorailCar
-            className="bg-[#2f3317] hover:bg-[#000000] text-brand-white"
+            className="bg-[#33b0ff] hover:bg-[#000000] text-brand-white"
             icon={<Search size={14} />}
           >
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-highlight-500": itemState.isHovered,
-                })}
-              >
-                Research
-              </span>
-            )}
+            {() => "Research"}
           </MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
@@ -173,74 +154,43 @@ export function Gallery() {
         </Monorail>
       </GallerySection>
 
-      <GallerySection title="Single car">
-        <Monorail>
-          <MonorailCar>{() => <span>One car</span>}</MonorailCar>
-        </Monorail>
-      </GallerySection>
-
       <GallerySection
         description="Override tokens with CSS or Tailwind. Default vs [--monorail-active-bg:var(--neutral-500)]."
         title="Color"
       >
-        <Monorail>
+        <Monorail style={{ "--monorail-active-bg": "var(--neutral-500)", "--monorail-color": "var(--neutral-500)" } as React.CSSProperties}>
           <MonorailCar>
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-highlight-500": itemState.isActive,
-                })}
-              >
-                Highlight
-              </span>
-            )}
+            {() => "Default"}
           </MonorailCar>
           <MonorailCar>
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-highlight-500": itemState.isActive,
-                })}
-              >
-                Active
-              </span>
-            )}
-          </MonorailCar>
-        </Monorail>
-        <Monorail className="[--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
-          <MonorailCar>
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-neutral-500": itemState.isActive,
-                })}
-              >
-                Neutral
-              </span>
-            )}
-          </MonorailCar>
-          <MonorailCar>
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-neutral-500": itemState.isActive,
-                })}
-              >
-                Active
-              </span>
-            )}
+            {() => "Active"}
           </MonorailCar>
         </Monorail>
       </GallerySection>
 
-      <GallerySection description="default vs large." title="Size">
+      <GallerySection
+        description="Default 28px vs className h-[38px] and h-[50px]."
+        title="Size"
+      >
         <Monorail>
           <MonorailCar>{() => <span>Default</span>}</MonorailCar>
           <MonorailCar>{() => <span>Size</span>}</MonorailCar>
         </Monorail>
         <Monorail>
-          <MonorailCar size="large">{() => <span>Large</span>}</MonorailCar>
-          <MonorailCar size="large">{() => <span>Size</span>}</MonorailCar>
+          <MonorailCar className="h-[38px] text-sm [--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
+            {() => <span>38px</span>}
+          </MonorailCar>
+          <MonorailCar className="h-[38px] text-sm">
+            {() => <span>Size</span>}
+          </MonorailCar>
+        </Monorail>
+        <Monorail>
+          <MonorailCar className="h-[50px] text-sm [--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
+            {() => <span>50px</span>}
+          </MonorailCar>
+          <MonorailCar className="h-[50px] text-sm">
+            {() => <span>Size</span>}
+          </MonorailCar>
         </Monorail>
       </GallerySection>
 

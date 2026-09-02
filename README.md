@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (default `http://localhost:5173`). The gallery covers hover-to-reveal, icons, controlled mode, sizes, status-only rails, and CSS theming.
+Open the URL Vite prints (default `http://localhost:5173`). The gallery covers hover-to-reveal, icons, controlled mode, CSS height, status-only rails, and CSS theming.
 
 ## Features
 
@@ -21,7 +21,7 @@ Open the URL Vite prints (default `http://localhost:5173`). The gallery covers h
 - Hover preview that can reveal collapsed labels
 - Width animation via measured content (`ResizeObserver` + Motion)
 - Clipped, overlapping car shapes (via [augmented-ui](https://augmented-ui.com/))
-- `default` and `large` sizes; colors via CSS variables or Tailwind
+- Height and type size via CSS on the car; colors via CSS variables or Tailwind
 - Optional non-button cars for display-only status
 - Per-rail state isolation (multiple rails on one page do not share selection)
 
@@ -103,9 +103,8 @@ export function Example() {
 | `isActive` | `boolean` | `false` | Force this car active (ORed with the rail index). |
 | `hasHoverEffect` | `boolean` | `false` | Apply the active background while hovered. |
 | `onClick` | `(index: number) => void` | — | Used in controlled mode; the parent should update `activeIndex`. |
-| `size` | `"default" \| "large"` | `"default"` | Car height and type size. |
 | `disableTransitions` | `boolean` | inherited | Override the rail transition setting. |
-| `className` | `string` | — | Extra classes on the car element. |
+| `className` | `string` | — | Extra classes on the car element. Override height (`h-[38px]`), type size, and `--monorail-*` tokens here. |
 | `activeClassName` | `string` | — | Extra classes when active or hover-highlighted. |
 | `contentClassName` | `string` | — | Classes on the animated width wrapper. |
 | `iconClassName` | `string` | — | Classes on the icon wrapper. |
@@ -152,7 +151,7 @@ npm run build    # ESM + types via tsup
 - **Direct children + `cloneElement`.** `Monorail` injects `index`, `totalItems`, and control props. Nested wrappers around `MonorailCar` will not receive those props.
 - **Jotai per rail.** Each `Monorail` mounts a Jotai `Provider` so hover and selection state stay local. `ActiveIndexUpdater` (inside the provider) is what syncs `activeIndex` / `initialActiveIndex` into that store.
 - **Measured width.** `MonorailContent` keeps an off-flow `w-max` row, observes it with `ResizeObserver`, and animates the outer width with Motion so labels can appear and disappear without jumping.
-- **Clipped overlaps.** Adjacent cars use `data-augmented-ui` mixins (`tr-clip-y`, `l-clip-y`, rounded corners on the ends) plus `--aug-*` CSS variables. The first/middle/last/single variants are driven by CVA.
+- **Clipped overlaps.** Adjacent cars use `data-augmented-ui` mixins (`tr-clip-y`, `l-clip-y`, rounded corners on the ends) plus `--aug-*` CSS variables. Right-side clip insets scale from the car’s measured height (28px base). The first/middle/last/single variants are driven by CVA.
 - **Tailwind classes in source.** The package ships the tokens it needs (`--highlight-500`, `--neutral-500`, `--brand-white`) and a small Tailwind preset. Host apps must scan the package source so those utilities are generated.
 
 ## License
