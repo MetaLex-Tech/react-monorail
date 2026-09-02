@@ -167,6 +167,23 @@ describe("Monorail", () => {
     expect(railButtons(container)[0].className).toContain("text-xs");
   });
 
+  it("defaults colors to the --monorail-* tokens", () => {
+    const { container } = render(
+      <Monorail>
+        <MonorailCar>{() => "Car"}</MonorailCar>
+        <MonorailCar>{() => "Other"}</MonorailCar>
+      </Monorail>,
+    );
+
+    const [active, inactive] = railButtons(container);
+    expect(active.className).toContain("bg-[rgb(var(--monorail-active-bg))]");
+    expect(active.className).toContain(
+      "text-[rgb(var(--monorail-active-text))]",
+    );
+    expect(inactive.className).toContain("bg-[rgb(var(--monorail-bg))]");
+    expect(inactive.className).toContain("text-[rgb(var(--monorail-text))]");
+  });
+
   it("lets className override height and type size", () => {
     const { container } = render(
       <Monorail>

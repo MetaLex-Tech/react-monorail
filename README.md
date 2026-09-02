@@ -152,7 +152,7 @@ npm run build    # ESM + types via tsup
 - **Jotai per rail.** Each `Monorail` mounts a Jotai `Provider` so hover and selection state stay local. `ActiveIndexUpdater` (inside the provider) is what syncs `activeIndex` / `initialActiveIndex` into that store.
 - **Measured width.** `MonorailContent` keeps an off-flow `w-max` row, observes it with `ResizeObserver`, and animates the outer width with Motion so labels can appear and disappear without jumping.
 - **Clipped overlaps.** Adjacent cars use `data-augmented-ui` mixins (`tr-clip-y`, `l-clip-y`, rounded corners on the ends) plus `--aug-*` CSS variables. Right-side clip insets scale from the car’s measured height (28px base). The first/middle/last/single variants are driven by CVA.
-- **Tailwind classes in source.** The package ships the tokens it needs (`--highlight-500`, `--neutral-500`, `--brand-white`) and a small Tailwind preset. Host apps must scan the package source so those utilities are generated.
+- **Tailwind classes in source.** The package ships `--monorail-bg`, `--monorail-text`, `--monorail-active-bg`, and `--monorail-active-text`, plus a small Tailwind preset. Host apps must scan the package source so those utilities are generated.
 
 ## License
 

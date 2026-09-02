@@ -8,7 +8,7 @@ import {
   Settings2,
   User,
 } from "lucide-react";
-import { type ReactNode, useState } from "react";
+import { type CSSProperties, type ReactNode, useState } from "react";
 import { Monorail, MonorailCar } from "react-monorail";
 import { cn } from "../src/lib/cn";
 
@@ -54,23 +54,13 @@ export function Gallery() {
       >
         <Monorail>
           <MonorailCar
-            className="bg-[#33b0ff] hover:bg-[#000000] text-brand-white"
+            className="bg-[#33b0ff] hover:bg-[#000000] text-white"
             icon={<Search size={14} />}
           >
             {() => "Research"}
           </MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
-            {(itemState) =>
-              itemState.isActive && (
-                <span
-                // className={cn({
-                //   "text-highlight-500": itemState.isActive,
-                // })}
-                >
-                  Design
-                </span>
-              )
-            }
+            {(itemState) => itemState.isActive && <span>Design</span>}
           </MonorailCar>
           <MonorailCar>
             {(itemState) => itemState.isActive && <span>Build</span>}
@@ -109,62 +99,41 @@ export function Gallery() {
       >
         <Monorail activeIndex={controlledIndex}>
           <MonorailCar icon={<User size={14} />} isButton={false}>
-            {(itemState) => (
-              <span
-                className={cn({
-                  "text-highlight-500": itemState.isActive,
-                })}
-              >
-                Always visible
-              </span>
-            )}
+            {() => <span>Always visible</span>}
           </MonorailCar>
           <MonorailCar hasHoverEffect isButton={false}>
             {() => <span>Hover highlight</span>}
           </MonorailCar>
           <MonorailCar onClick={(index) => setControlledIndex(index)}>
-            {(itemState) =>
-              itemState.isActive && (
-                <span
-                  className={cn({
-                    "text-highlight-500": itemState.isHovered,
-                  })}
-                >
-                  + Add note
-                </span>
-              )
-            }
+            {(itemState) => itemState.isActive && <span>+ Add note</span>}
           </MonorailCar>
           <MonorailCar
             icon={<Code2 size={14} />}
             onClick={(index) => setControlledIndex(index)}
           >
-            {(itemState) =>
-              itemState.isActive && (
-                <span
-                  className={cn({
-                    "text-highlight-500": itemState.isHovered,
-                  })}
-                >
-                  Run
-                </span>
-              )
-            }
+            {(itemState) => itemState.isActive && <span>Run</span>}
           </MonorailCar>
         </Monorail>
       </GallerySection>
 
       <GallerySection
-        description="Override tokens with CSS or Tailwind. Default vs [--monorail-active-bg:var(--neutral-500)]."
+        description="Override tokens with CSS or Tailwind. Default vs [--monorail-active-bg:51_176_255]."
         title="Color"
       >
-        <Monorail style={{ "--monorail-active-bg": "var(--neutral-500)", "--monorail-color": "var(--neutral-500)" } as React.CSSProperties}>
-          <MonorailCar>
-            {() => "Default"}
-          </MonorailCar>
-          <MonorailCar>
-            {() => "Active"}
-          </MonorailCar>
+        <Monorail>
+          <MonorailCar>{() => "Default"}</MonorailCar>
+          <MonorailCar>{() => "Active"}</MonorailCar>
+        </Monorail>
+        <Monorail
+          style={
+            {
+              "--monorail-active-bg": "51 176 255",
+              "--monorail-text": "218 255 0",
+            } as CSSProperties
+          }
+        >
+          <MonorailCar>{() => "Override"}</MonorailCar>
+          <MonorailCar>{() => "Active"}</MonorailCar>
         </Monorail>
       </GallerySection>
 
@@ -177,7 +146,7 @@ export function Gallery() {
           <MonorailCar>{() => <span>Size</span>}</MonorailCar>
         </Monorail>
         <Monorail>
-          <MonorailCar className="h-[38px] text-sm [--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
+          <MonorailCar className="h-[38px] text-sm">
             {() => <span>38px</span>}
           </MonorailCar>
           <MonorailCar className="h-[38px] text-sm">
@@ -185,7 +154,7 @@ export function Gallery() {
           </MonorailCar>
         </Monorail>
         <Monorail>
-          <MonorailCar className="h-[50px] text-sm [--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
+          <MonorailCar className="h-[50px] text-sm">
             {() => <span>50px</span>}
           </MonorailCar>
           <MonorailCar className="h-[50px] text-sm">
@@ -200,10 +169,10 @@ export function Gallery() {
       >
         <Monorail activeIndex={-1}>
           <MonorailCar isButton={false} icon={<FileText size={14} />}>
-            {() => <span className="text-brand-white/60">Draft</span>}
+            {() => <span className="text-monorail-text/60">Draft</span>}
           </MonorailCar>
           <MonorailCar isButton={false} icon={<Code2 size={14} />}>
-            {() => <span className="text-brand-white/60">Publish</span>}
+            {() => <span className="text-monorail-text/60">Publish</span>}
           </MonorailCar>
         </Monorail>
       </GallerySection>
@@ -263,7 +232,7 @@ function StatusRail({
       activeIndex={-1}
       className={
         blocked
-          ? "[--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]"
+          ? "[--monorail-active-bg:51_176_255]"
           : undefined
       }
     >
@@ -280,9 +249,8 @@ function StatusRail({
             {() =>
               hideLabel ? null : (
                 <span
-                  className={cn("text-brand-white/60", {
-                    "text-highlight-500": isDone && !blocked,
-                    "text-neutral-500": isDone && blocked,
+                  className={cn("text-monorail-text/60", {
+                    "text-monorail-active-text": isDone,
                   })}
                 >
                   {isDone ? step.doneLabel : step.label}

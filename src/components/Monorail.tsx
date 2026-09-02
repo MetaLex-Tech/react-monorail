@@ -171,7 +171,7 @@ const monorailCarVariants = cva(
     "relative appearance-none min-w-4 px-2 py-[1px]",
     "-ml-1.5 pl-[14px]",
     "h-[28px] text-xs",
-    "bg-[rgb(var(--monorail-bg))]",
+    "bg-[rgb(var(--monorail-bg))] text-[rgb(var(--monorail-text))]",
     "[--aug-border-all:2px] [--aug-border-bg:rgb(var(--monorail-bg))]",
   ),
   {
@@ -448,7 +448,7 @@ const MonorailContent: FC<PropsWithChildren<MonorailContentProps>> = ({
             className={cn([
               "flex items-center justify-center w-6 h-6 rounded-[4px] overflow-hidden",
               {
-                "bg-gradient-to-r from-[rgba(var(--monorail-color)/0.11)] to-[rgba(var(--monorail-color)/0)]":
+                "bg-gradient-to-r from-[rgba(var(--monorail-text)/0.11)] to-[rgba(var(--monorail-text)/0)]":
                   isActive && isFirst,
               },
               iconClassName,
