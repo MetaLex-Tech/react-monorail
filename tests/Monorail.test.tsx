@@ -12,8 +12,8 @@ describe("Monorail", () => {
   it("renders cars and marks the first as active by default", () => {
     const { container } = render(
       <Monorail>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -35,8 +35,8 @@ describe("Monorail", () => {
 
     const { container } = render(
       <Monorail onActiveIndexChange={onActiveIndexChange}>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -58,8 +58,8 @@ describe("Monorail", () => {
       const [activeIndex, setActiveIndex] = useState(0);
       return (
         <Monorail activeIndex={activeIndex}>
-          <MonorailCar onClick={setActiveIndex}>Alpha</MonorailCar>
-          <MonorailCar onClick={setActiveIndex}>Beta</MonorailCar>
+          <MonorailCar onClick={setActiveIndex}>{() => "Alpha"}</MonorailCar>
+          <MonorailCar onClick={setActiveIndex}>{() => "Beta"}</MonorailCar>
         </Monorail>
       );
     }
@@ -79,8 +79,8 @@ describe("Monorail", () => {
 
     const { container } = render(
       <Monorail activeIndex={0}>
-        <MonorailCar onClick={onClick}>Alpha</MonorailCar>
-        <MonorailCar onClick={onClick}>Beta</MonorailCar>
+        <MonorailCar onClick={onClick}>{() => "Alpha"}</MonorailCar>
+        <MonorailCar onClick={onClick}>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -98,7 +98,7 @@ describe("Monorail", () => {
   it("renders a div instead of a button when isButton is false", () => {
     const { container } = render(
       <Monorail>
-        <MonorailCar isButton={false}>Static</MonorailCar>
+        <MonorailCar isButton={false}>{() => "Static"}</MonorailCar>
       </Monorail>,
     );
 
@@ -112,8 +112,8 @@ describe("Monorail", () => {
   it("selects no car when activeIndex is -1", () => {
     const { container } = render(
       <Monorail activeIndex={-1}>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -127,8 +127,8 @@ describe("Monorail", () => {
 
     const { container } = render(
       <Monorail>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Peek</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Peek"}</MonorailCar>
       </Monorail>,
     );
 
@@ -142,8 +142,8 @@ describe("Monorail", () => {
   it("still renders when transitions are disabled", () => {
     const { container } = render(
       <Monorail disableTransitions>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -155,32 +155,10 @@ describe("Monorail", () => {
     ).toBeInTheDocument();
   });
 
-  it("applies highlight and neutral color tokens", () => {
-    const { container, rerender } = render(
-      <Monorail color="highlight">
-        <MonorailCar>Car</MonorailCar>
-      </Monorail>,
-    );
-
-    expect(railButtons(container)[0].className).toContain(
-      "[--monorail-color:var(--highlight-500)]",
-    );
-
-    rerender(
-      <Monorail color="neutral">
-        <MonorailCar>Car</MonorailCar>
-      </Monorail>,
-    );
-
-    expect(railButtons(container)[0].className).toContain(
-      "[--monorail-color:var(--neutral-500)]",
-    );
-  });
-
   it("applies large size classes", () => {
     const { container } = render(
       <Monorail>
-        <MonorailCar size="large">Large</MonorailCar>
+        <MonorailCar size="large">{() => "Large"}</MonorailCar>
       </Monorail>,
     );
 
@@ -191,9 +169,9 @@ describe("Monorail", () => {
   it("sets augmented-ui mixins for first, middle, last, and single cars", () => {
     const { container, rerender } = render(
       <Monorail>
-        <MonorailCar>A</MonorailCar>
-        <MonorailCar>B</MonorailCar>
-        <MonorailCar>C</MonorailCar>
+        <MonorailCar>{() => "A"}</MonorailCar>
+        <MonorailCar>{() => "B"}</MonorailCar>
+        <MonorailCar>{() => "C"}</MonorailCar>
       </Monorail>,
     );
 
@@ -208,7 +186,7 @@ describe("Monorail", () => {
 
     rerender(
       <Monorail>
-        <MonorailCar>Only</MonorailCar>
+        <MonorailCar>{() => "Only"}</MonorailCar>
       </Monorail>,
     );
 
@@ -224,8 +202,8 @@ describe("Monorail", () => {
 
     const { container } = render(
       <Monorail>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 
@@ -243,8 +221,8 @@ describe("Monorail", () => {
   it("respects initialActiveIndex in uncontrolled mode", () => {
     const { container } = render(
       <Monorail initialActiveIndex={1}>
-        <MonorailCar>Alpha</MonorailCar>
-        <MonorailCar>Beta</MonorailCar>
+        <MonorailCar>{() => "Alpha"}</MonorailCar>
+        <MonorailCar>{() => "Beta"}</MonorailCar>
       </Monorail>,
     );
 

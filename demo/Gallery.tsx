@@ -40,9 +40,7 @@ export function Gallery() {
         title="Hover to reveal"
       >
         <Monorail>
-          <MonorailCar isButton={false}>
-            {() => "Phases"}
-          </MonorailCar>
+          <MonorailCar isButton={false}>{() => "Phases"}</MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
               (itemState.isActive || itemState.isHovered) && "Design"
@@ -66,20 +64,27 @@ export function Gallery() {
         title="Car Customization"
       >
         <Monorail>
-          <MonorailCar className="bg-[#2f3317] hover:bg-[#000000] text-brand-white" icon={<Search size={14} />}>
+          <MonorailCar
+            className="bg-[#2f3317] hover:bg-[#000000] text-brand-white"
+            icon={<Search size={14} />}
+          >
             {(itemState) => (
-              <span className={cn({
-                "text-highlight-500": itemState.isHovered,
-              })}>Research</span>
+              <span
+                className={cn({
+                  "text-highlight-500": itemState.isHovered,
+                })}
+              >
+                Research
+              </span>
             )}
           </MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
               itemState.isActive && (
                 <span
-                  // className={cn({
-                  //   "text-highlight-500": itemState.isActive,
-                  // })}
+                // className={cn({
+                //   "text-highlight-500": itemState.isActive,
+                // })}
                 >
                   Design
                 </span>
@@ -87,18 +92,10 @@ export function Gallery() {
             }
           </MonorailCar>
           <MonorailCar>
-            {(itemState) =>
-              itemState.isActive && (
-                <span>Build</span>
-              )
-            }
+            {(itemState) => itemState.isActive && <span>Build</span>}
           </MonorailCar>
           <MonorailCar>
-            {(itemState) =>
-              itemState.isActive && (
-                <span>Review</span>
-              )
-            }
+            {(itemState) => itemState.isActive && <span>Review</span>}
           </MonorailCar>
           <MonorailCar>
             {() => (
@@ -183,10 +180,10 @@ export function Gallery() {
       </GallerySection>
 
       <GallerySection
-        description="highlight (default) vs neutral."
+        description="Override tokens with CSS or Tailwind. Default vs [--monorail-active-bg:var(--neutral-500)]."
         title="Color"
       >
-        <Monorail color="highlight">
+        <Monorail>
           <MonorailCar>
             {(itemState) => (
               <span
@@ -210,7 +207,7 @@ export function Gallery() {
             )}
           </MonorailCar>
         </Monorail>
-        <Monorail color="neutral">
+        <Monorail className="[--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]">
           <MonorailCar>
             {(itemState) => (
               <span
@@ -251,7 +248,7 @@ export function Gallery() {
         description="Cars are not buttons. activeIndex={-1} so none is selected."
         title="Status only"
       >
-        <Monorail activeIndex={-1} color="highlight">
+        <Monorail activeIndex={-1}>
           <MonorailCar isButton={false} icon={<FileText size={14} />}>
             {() => <span className="text-brand-white/60">Draft</span>}
           </MonorailCar>
@@ -312,7 +309,14 @@ function StatusRail({
   ];
 
   return (
-    <Monorail activeIndex={-1} color={blocked ? "neutral" : "highlight"}>
+    <Monorail
+      activeIndex={-1}
+      className={
+        blocked
+          ? "[--monorail-active-bg:var(--neutral-500)] [--monorail-color:var(--neutral-500)]"
+          : undefined
+      }
+    >
       {steps.map((step) => {
         const isDone = activeSteps.includes(step.key);
         const hideLabel = blocked && step.key !== "draft";
@@ -357,9 +361,7 @@ function GallerySection({
     <section className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-col gap-1">
         <h2 className="text-sm font-medium">{title}</h2>
-        {description ? (
-          <p className="text-xs">{description}</p>
-        ) : null}
+        {description ? <p className="text-xs">{description}</p> : null}
       </div>
       <div className="flex flex-col gap-3">{children}</div>
     </section>

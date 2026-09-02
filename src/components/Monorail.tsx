@@ -42,8 +42,6 @@ type MonorailProps = {
   disableTransitions?: boolean;
   /** Called when active index changes */
   onActiveIndexChange?: (index: number) => void;
-  /** Set the color of the monorail cars */
-  color?: "neutral" | "highlight";
 };
 
 /**
@@ -57,7 +55,6 @@ export const Monorail: React.FC<MonorailProps> = ({
   activeIndex: controlledActiveIndex,
   disableTransitions = false,
   onActiveIndexChange,
-  color = "highlight",
 }) => {
   const setActiveIndex = useSetAtom(activeIndexAtom);
 
@@ -78,7 +75,6 @@ export const Monorail: React.FC<MonorailProps> = ({
           totalItems: Children.count(children),
           onActiveIndexChange,
           activeIndex: controlledActiveIndex,
-          color,
         })
       : null,
   );
@@ -122,7 +118,6 @@ export type MonorailCarProps = {
   onActiveIndexChange?: (index: number) => void;
   onClick?: (index: number) => void;
   activeIndex?: number;
-  color?: "neutral" | "highlight";
   size?: "default" | "large";
   style?: HTMLAttributes<HTMLDivElement>["style"];
 };
@@ -160,10 +155,6 @@ const monorailCarVariants = cva(
   ),
   {
     variants: {
-      color: {
-        neutral: "[--monorail-color:var(--neutral-500)] ",
-        highlight: "[--monorail-color:var(--highlight-500)]",
-      },
       size: {
         default: "h-[28px] text-xs",
         large: "h-[34px] text-sm",
@@ -198,11 +189,6 @@ const monorailCarVariants = cva(
         className: "!pl-2",
       },
       {
-        color: "neutral",
-        active: true,
-        className: "bg-neutral-500/[0.11]",
-      },
-      {
         position: ["first", "middle"],
         size: "default",
         className:
@@ -229,7 +215,6 @@ const monorailCarVariants = cva(
     ],
     defaultVariants: {
       position: "middle",
-      color: "highlight",
       size: "default",
       active: false,
       hasIcon: false,
@@ -259,7 +244,6 @@ export const MonorailCar = forwardRef<
       onActiveIndexChange,
       onClick,
       activeIndex: controlledActiveIndex,
-      color,
       size,
       style,
     },
@@ -312,7 +296,6 @@ export const MonorailCar = forwardRef<
       className: cn(
         monorailCarVariants({
           position,
-          color,
           hasIcon,
           active: itemState.isActive || (hasHoverEffect && itemState.isHovered),
           [`${activeClassName}`]:
