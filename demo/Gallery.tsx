@@ -40,87 +40,46 @@ export function Gallery() {
         title="Hover to reveal"
       >
         <Monorail>
-          <MonorailCar>
-            {(itemState) => (
-              <div className="inline-flex h-[18px] items-center gap-1">
-                <span
-                  className={cn({
-                    "text-highlight-500": itemState.isActive,
-                  })}
-                >
-                  Research
-                </span>
-              </div>
-            )}
+          <MonorailCar isButton={false}>
+            {() => "Phases"}
           </MonorailCar>
-          <MonorailCar>
+          <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
-              (itemState.isActive || itemState.isHovered) && (
-                <div className="inline-flex h-[18px] items-center gap-1">
-                  <Settings2 size={14} />
-                  <span
-                    className={itemState.isActive ? "text-highlight-500" : ""}
-                  >
-                    Design
-                  </span>
-                </div>
-              )
+              (itemState.isActive || itemState.isHovered) && "Design"
             }
           </MonorailCar>
-          <MonorailCar>
+          <MonorailCar icon={<FileText size={14} />}>
             {(itemState) =>
-              (itemState.isActive || itemState.isHovered) && (
-                <div className="inline-flex h-[18px] items-center gap-1">
-                  <FileText size={14} />
-                  <span
-                    className={itemState.isActive ? "text-highlight-500" : ""}
-                  >
-                    Build
-                  </span>
-                </div>
-              )
+              (itemState.isActive || itemState.isHovered) && "Build"
             }
           </MonorailCar>
-          <MonorailCar>
-            {(itemState) => (
-              <div className="inline-flex h-[18px] items-center gap-1">
-                <Rocket size={14} />
-                <span
-                  className={cn({
-                    "text-highlight-500": itemState.isActive,
-                  })}
-                >
-                  Launch
-                </span>
-              </div>
-            )}
+          <MonorailCar icon={<Rocket size={14} />}>
+            {(itemState) =>
+              (itemState.isActive || itemState.isHovered) && "Launch"
+            }
           </MonorailCar>
         </Monorail>
       </GallerySection>
 
       <GallerySection
-        description="Icons sit in the car; labels expand only on the active car."
-        title="Icons and labels"
+        description="Each car can have it's own state behaviour and style."
+        title="Car Customization"
       >
         <Monorail>
-          <MonorailCar icon={<Search size={14} />}>
+          <MonorailCar className="bg-[#2f3317] hover:bg-[#000000] text-brand-white" icon={<Search size={14} />}>
             {(itemState) => (
-              <span
-                className={cn({
-                  "text-highlight-500": itemState.isActive,
-                })}
-              >
-                Research
-              </span>
+              <span className={cn({
+                "text-highlight-500": itemState.isHovered,
+              })}>Research</span>
             )}
           </MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
               itemState.isActive && (
                 <span
-                  className={cn({
-                    "text-highlight-500": itemState.isActive,
-                  })}
+                  // className={cn({
+                  //   "text-highlight-500": itemState.isActive,
+                  // })}
                 >
                   Design
                 </span>
@@ -130,28 +89,22 @@ export function Gallery() {
           <MonorailCar>
             {(itemState) =>
               itemState.isActive && (
-                <span className="text-highlight-500">Build</span>
-              )
-            }
-          </MonorailCar>
-          <MonorailCar icon={<FileText size={14} />}>
-            {(itemState) =>
-              itemState.isActive && (
-                <span className="text-highlight-500">Review</span>
+                <span>Build</span>
               )
             }
           </MonorailCar>
           <MonorailCar>
-            {(itemState) => (
+            {(itemState) =>
+              itemState.isActive && (
+                <span>Review</span>
+              )
+            }
+          </MonorailCar>
+          <MonorailCar>
+            {() => (
               <div className="inline-flex h-[18px] items-center gap-1">
                 <Rocket size={14} />
-                <span
-                  className={cn({
-                    "text-highlight-500": itemState.isActive,
-                  })}
-                >
-                  Launch
-                </span>
+                Launch
               </div>
             )}
           </MonorailCar>
@@ -320,89 +273,6 @@ export function Gallery() {
           />
         ))}
       </GallerySection>
-
-      <GallerySection
-        description="Large cars with a trailing action. Parent owns the selected key."
-        title="Trailing action"
-      >
-        <Monorail
-          activeIndex={activePhaseIndex >= 0 ? activePhaseIndex : 0}
-          disableTransitions
-        >
-          {
-            [
-              ...phases.map((car) => {
-                const isActive = car.key === activePhaseKey;
-                return (
-                  <MonorailCar
-                    key={car.key}
-                    hasHoverEffect={!isActive}
-                    size="large"
-                    onClick={() => setActivePhaseKey(car.key)}
-                  >
-                    {({ isHovered }) => (
-                      <span
-                        className={cn(
-                          "inline-flex h-full items-center gap-2 text-sm",
-                          {
-                            "text-highlight-500": isHovered && !isActive,
-                          },
-                        )}
-                      >
-                        <span className="font-medium">{car.label}</span>
-                        <span className="text-brand-white/[0.24]">|</span>
-                        <span>{car.value}</span>
-                      </span>
-                    )}
-                  </MonorailCar>
-                );
-              }),
-              <MonorailCar
-                key="add-phase"
-                className="pl-2"
-                hasHoverEffect
-                icon={<span className="w-3 text-lg text-highlight-500">+</span>}
-                size="large"
-                onClick={() => {}}
-              >
-                {({ isHovered }) => (
-                  <span
-                    className={cn("text-muted-foreground", {
-                      "text-highlight-500": isHovered,
-                    })}
-                  >
-                    Add phase
-                  </span>
-                )}
-              </MonorailCar>,
-            ] as unknown as ReactElement<MonorailCarProps>
-          }
-        </Monorail>
-      </GallerySection>
-
-      <GallerySection
-        description="Two non-button cars used as a compact info strip."
-        title="Info strip"
-      >
-        <Monorail
-          className="h-7 w-full text-xs"
-          activeIndex={-1}
-          color="highlight"
-        >
-          <MonorailCar isButton={false} icon={<Search size={16} />}>
-            {() => (
-              <span className="ml-1 text-xs text-brand-white/80">
-                Preview only
-              </span>
-            )}
-          </MonorailCar>
-          <MonorailCar isButton={false}>
-            {() => (
-              <span className="text-xs text-highlight-500">Read-only</span>
-            )}
-          </MonorailCar>
-        </Monorail>
-      </GallerySection>
     </div>
   );
 }
@@ -486,9 +356,9 @@ function GallerySection({
   return (
     <section className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-col gap-1">
-        <h2 className="text-sm font-medium text-brand-white">{title}</h2>
+        <h2 className="text-sm font-medium">{title}</h2>
         {description ? (
-          <p className="text-xs text-brand-white/60">{description}</p>
+          <p className="text-xs">{description}</p>
         ) : null}
       </div>
       <div className="flex flex-col gap-3">{children}</div>

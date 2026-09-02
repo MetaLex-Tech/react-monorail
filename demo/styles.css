@@ -13,8 +13,8 @@ body,
 body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: rgb(var(--brand-black-900));
-  color: rgb(var(--brand-white));
+  background: white;
+  color: black;
   -webkit-font-smoothing: antialiased;
 }
 

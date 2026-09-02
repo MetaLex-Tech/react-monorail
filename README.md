@@ -61,7 +61,7 @@ export default config;
 
 `MonorailCar` children must be **direct** children of `Monorail`. Do not wrap a car in another component; `Monorail` clones each child to inject index and theme props.
 
-Each car’s `children` is a render function that receives `{ isActive, isHovered, isOtherHovered }`.
+Each car’s `children` is a `ReactNode`. Cars set `data-active` and `data-hovered` so you can show or hide labels with CSS.
 
 ```tsx
 import { Monorail, MonorailCar } from "react-monorail";
@@ -70,21 +70,11 @@ import "react-monorail/styles.css";
 export function Example() {
   return (
     <Monorail>
-      <MonorailCar>
-        {(state) => (
-          <span className={state.isActive ? "text-highlight-500" : undefined}>
-            Research
-          </span>
-        )}
+      <MonorailCar>Research</MonorailCar>
+      <MonorailCar childrenWrapperClassName="[[data-active=false][data-hovered=false]_&]:hidden">
+        Design
       </MonorailCar>
-      <MonorailCar>
-        {(state) =>
-          (state.isActive || state.isHovered) && <span>Design</span>
-        }
-      </MonorailCar>
-      <MonorailCar>
-        {() => <span>Launch</span>}
-      </MonorailCar>
+      <MonorailCar>Launch</MonorailCar>
     </Monorail>
   );
 }
@@ -108,7 +98,7 @@ export function Example() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `children` | `(state) => ReactNode` | — | Render prop with `isActive`, `isHovered`, `isOtherHovered`. |
+| `children` | `ReactNode` | — | Label or content inside the car. |
 | `icon` | `ReactNode` | — | Optional leading icon; stays visible when the label collapses. |
 | `isButton` | `boolean` | `true` | When `false`, renders a `div` instead of a `button`. |
 | `isActive` | `boolean` | `false` | Force this car active (ORed with the rail index). |
@@ -128,9 +118,9 @@ export function Example() {
 
 ## Examples
 
-**Hover to reveal** — keep a short label on the first and last cars; only render the middle labels when `isActive || isHovered`.
+**Hover to reveal** — keep a short label on the first and last cars; hide middle labels unless the car is `data-active` or `data-hovered`.
 
-**Icons and labels** — pass `icon` so collapsed cars still have a hit target; render the text only when `isActive`.
+**Icons and labels** — pass `icon` so collapsed cars still have a hit target; hide the text unless the car is `data-active`.
 
 **Controlled** — pass `activeIndex` and handle `onClick` on cars that should change the selection. Cars with `isButton={false}` are display-only.
 

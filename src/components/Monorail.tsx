@@ -153,10 +153,10 @@ const ActiveIndexUpdater = ({
 
 const monorailCarVariants = cva(
   cn(
-    "relative appearance-none px-2 py-[1px]",
+    "relative appearance-none min-w-4 px-2 py-[1px]",
     "-ml-1.5 pl-[14px]",
-    "bg-brand-white/[0.06]",
-    "[--aug-border-all:2px] [--aug-border-bg:rgba(var(--monorail-color)/0.11)]",
+    "bg-[rgb(var(--monorail-bg))]",
+    "[--aug-border-all:2px] [--aug-border-bg:rgb(var(--monorail-bg))]",
   ),
   {
     variants: {
@@ -183,7 +183,7 @@ const monorailCarVariants = cva(
         single: "rounded-[4px] pr-[0px] pl-[8px] ml-0",
       },
       active: {
-        true: "bg-[rgba(var(--monorail-color)/0.11)]",
+        true: "bg-[rgb(var(--monorail-active-bg))] [--aug-border-bg:rgb(var(--monorail-active-bg))] text-[rgb(var(--monorail-active-text))]",
       },
     },
     compoundVariants: [

@@ -5,4 +5,8 @@
   --neutral-500: 51 176 255;
   --brand-white: 242 242 242;
   --brand-black-900: 20 20 19;
+
+  --monorail-bg: 156 156 156;
+  --monorail-active-bg: 218 255 0;
+  --monorail-active-text: 0 0 0;
 }
