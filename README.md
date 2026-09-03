@@ -1,8 +1,6 @@
 # react-monorail [![npm version](https://img.shields.io/npm/v/react-monorail.svg)](https://www.npmjs.com/package/react-monorail)
 
-<video src="./demo.webm" width="400" autoplay loop muted playsinline>
-  <a href="./demo.webm">Watch the demo</a>
-</video>
+<img src="./demo.gif" width="400" alt="Monorail demo" />
 
 A segmented, overlapping rail of expandable cars for React. The active car grows to show its content; inactive cars collapse to an icon or a sliver. Hover previews a collapsed car without committing to it.
 
@@ -11,7 +9,7 @@ Monorail is for compact step indicators, phase selectors, and status strips wher
 ## Installing
 
 ```bash
-npm add react-monorail
+yarn add react-monorail
 ```
 
 or
