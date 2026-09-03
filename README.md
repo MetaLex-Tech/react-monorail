@@ -1,10 +1,44 @@
-# Monorail
+# react-monorail [![npm version](https://img.shields.io/npm/v/react-monorail.svg)](https://www.npmjs.com/package/react-monorail)
 
-A React component for a segmented, overlapping rail of expandable “cars.” The active car grows to show its content; inactive cars collapse to an icon or a sliver. Hover previews a collapsed car without committing to it.
+A segmented, overlapping rail of expandable cars for React. The active car grows to show its content; inactive cars collapse to an icon or a sliver. Hover previews a collapsed car without committing to it.
 
 Monorail is for compact step indicators, phase selectors, and status strips where several items share one row and only one (or none) should take up space.
 
 ![Monorail demo](./demo/screenshot.png)
+
+## Installing
+
+```bash
+npm add react-monorail
+```
+
+or
+
+```bash
+npm install --save react-monorail
+```
+
+Peer dependencies: `react` and `react-dom`.
+
+## Basic Example
+
+`MonorailCar` children must be **direct** children of `Monorail`. Do not wrap a car in another component; `Monorail` clones each child to inject index and theme props.
+
+Each car’s `children` is a render function. It receives `{ isActive, isHovered, isOtherHovered }` so you can show or hide labels. Cars also set `data-active` and `data-hovered` for CSS.
+
+```js
+import { Monorail, MonorailCar } from "react-monorail";
+
+export default () => (
+  <Monorail>
+    <MonorailCar>{() => "Research"}</MonorailCar>
+    <MonorailCar>
+      {(itemState) => (itemState.isActive || itemState.isHovered) && "Design"}
+    </MonorailCar>
+    <MonorailCar>{() => "Launch"}</MonorailCar>
+  </Monorail>
+);
+```
 
 ## Demo
 
@@ -15,117 +49,225 @@ npm run dev
 
 Open the URL Vite prints (default `http://localhost:5173`). The gallery covers hover-to-reveal, icons, controlled mode, CSS height, status-only rails, and CSS theming.
 
-## Features
-
-- Uncontrolled or controlled active index
-- Hover preview that can reveal collapsed labels
-- Width animation via measured content (`ResizeObserver` + Motion)
-- Clipped, overlapping car shapes (via [augmented-ui](https://augmented-ui.com/))
-- Height and type size via CSS on the car; colors via CSS variables or Tailwind
-- Optional non-button cars for display-only status
-- Per-rail state isolation (multiple rails on one page do not share selection)
-
-## Installation
-
-```bash
-npm install react-monorail
-```
-
-Peer dependencies: `react`, `react-dom`, and `tailwindcss` v3.
-
-Import the CSS once in your app entry (or layout):
-
-```ts
-import "react-monorail/styles.css";
-```
-
-Point Tailwind at the package and the bundled preset so utility classes resolve:
-
-```ts
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
-import monorailPreset from "react-monorail/tailwind-preset";
-
-const config: Config = {
-  presets: [monorailPreset],
-  content: [
-    "./src/**/*.{ts,tsx}",
-    "./node_modules/react-monorail/src/**/*.{ts,tsx}",
-  ],
-};
-
-export default config;
-```
-
-## Usage
-
-`MonorailCar` children must be **direct** children of `Monorail`. Do not wrap a car in another component; `Monorail` clones each child to inject index and theme props.
-
-Each car’s `children` is a `ReactNode`. Cars set `data-active` and `data-hovered` so you can show or hide labels with CSS.
-
-```tsx
-import { Monorail, MonorailCar } from "react-monorail";
-import "react-monorail/styles.css";
-
-export function Example() {
-  return (
-    <Monorail>
-      <MonorailCar>Research</MonorailCar>
-      <MonorailCar childrenWrapperClassName="[[data-active=false][data-hovered=false]_&]:hidden">
-        Design
-      </MonorailCar>
-      <MonorailCar>Launch</MonorailCar>
-    </Monorail>
-  );
-}
-```
-
 ## API
 
-### `Monorail`
+## Components
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `children` | `MonorailCar` element(s) | — | Direct `MonorailCar` children. |
-| `activeIndex` | `number` | — | Controlled active car. Pass `-1` for none selected. |
-| `initialActiveIndex` | `number` | `0` | Uncontrolled initial selection. |
-| `onActiveIndexChange` | `(index: number) => void` | — | Fired when an uncontrolled car is activated. |
-| `disableTransitions` | `boolean` | `false` | Snap width changes instead of animating. |
-| `className` | `string` | — | Extra classes on the rail container. Override `--monorail-*` tokens here. |
+react-monorail consists of 2 components which need to be used together.
 
-### `MonorailCar`
+### &lt;Monorail /&gt;
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `children` | `ReactNode` | — | Label or content inside the car. |
-| `icon` | `ReactNode` | — | Optional leading icon; stays visible when the label collapses. |
-| `isButton` | `boolean` | `true` | When `false`, renders a `div` instead of a `button`. |
-| `isActive` | `boolean` | `false` | Force this car active (ORed with the rail index). |
-| `hasHoverEffect` | `boolean` | `false` | Apply the active background while hovered. |
-| `onClick` | `(index: number) => void` | — | Used in controlled mode; the parent should update `activeIndex`. |
-| `disableTransitions` | `boolean` | inherited | Override the rail transition setting. |
-| `className` | `string` | — | Extra classes on the car element. Override height (`h-[38px]`), type size, and `--monorail-*` tokens here. |
-| `activeClassName` | `string` | — | Extra classes when active or hover-highlighted. |
-| `contentClassName` | `string` | — | Classes on the animated width wrapper. |
-| `iconClassName` | `string` | — | Classes on the icon wrapper. |
-| `childrenWrapperClassName` | `string` | — | Classes on the label wrapper. |
-| `style` | `CSSProperties` | — | Inline styles on the car element. |
+The rail container. It provides per-rail selection and hover state and clones each `MonorailCar` child to inject `index`, `totalItems`, and control props.
 
-`index`, `totalItems`, `activeIndex`, and `onActiveIndexChange` on `MonorailCar` are injected by `Monorail`. You do not need to set them unless you are doing something unusual.
+#### children: `ReactElement<MonorailCarProps> | (ReactElement<MonorailCarProps> | null)[]`
 
-## Examples
+Direct `MonorailCar` children. Nested wrappers around a car will not receive injected props.
 
-**Hover to reveal** — keep a short label on the first and last cars; hide middle labels unless the car is `data-active` or `data-hovered`.
+#### className: `string`
 
-**Icons and labels** — pass `icon` so collapsed cars still have a hit target; hide the text unless the car is `data-active`.
+> default: `"monorail"`
 
-**Controlled** — pass `activeIndex` and handle `onClick` on cars that should change the selection. Cars with `isButton={false}` are display-only.
+Extra classes on the rail container. Override `--monorail-*` tokens here.
 
-**Status only** — `activeIndex={-1}` and `isButton={false}` for a non-interactive strip.
+#### style: `CSSProperties`
 
-**Trailing action** — append a last car with `hasHoverEffect` and an `onClick` that does not have to select that car (for example, “Add phase”).
+> default: `undefined`
 
-See `demo/Gallery.tsx` for complete examples of each pattern.
+Inline styles on the rail container. Useful for setting `--monorail-*` CSS variables.
+
+#### initialActiveIndex: `number`
+
+> default: `0`
+
+This allows changing the car that should be active on initial render. This is a zero-based index, so first car is `0`, second car is `1`, ...
+
+> This can only be used in uncontrolled mode when react-monorail handles the current selected car internally and for this reason cannot be used together with `activeIndex`. See [here](#controlled-vs-uncontrolled-mode) for more info on modes.
+
+#### activeIndex: `number`
+
+> default: `undefined`
+
+Set the currently selected car. This is a zero-based index, so first car is `0`, second car is `1`, ... Pass `-1` for none selected.
+
+This enables controlled mode. See [here](#controlled-vs-uncontrolled-mode) for more info on modes.
+
+#### onActiveIndexChange: `(index: number) => void`
+
+> default: `undefined`
+
+This event handler is called every time the active car changes in uncontrolled mode.
+
+> In controlled mode, selection is updated from the parent. Use each car’s `onClick` instead of this handler.
+
+#### disableTransitions: `boolean`
+
+> default: `false`
+
+Snap width changes instead of animating. This option can also be set directly on an individual `<MonorailCar />`.
+
+### &lt;MonorailCar /&gt;
+
+An individual car in the rail. By default it renders a `<button type="button" />`; set `isButton={false}` to render a `<div />`.
+
+`index`, `totalItems`, `activeIndex`, and `onActiveIndexChange` are injected by `<Monorail />`. You do not need to set them unless you are doing something unusual.
+
+#### children: `(state: { isActive: boolean; isHovered: boolean; isOtherHovered: boolean }) => ReactNode`
+
+A render function that receives the car’s current state. Return the label or content to show inside the car. Returning `null` or `false` collapses the label while keeping the icon (if any) visible.
+
+#### icon: `ReactNode`
+
+> default: `undefined`
+
+Optional leading icon. Stays visible when the label collapses so collapsed cars still have a hit target.
+
+#### className: `string`
+
+> default: `undefined`
+
+Extra classes on the car element. Override height (`h-[38px]`), type size (`text-sm`), and `--monorail-*` tokens here. Default height is `28px` with `0.75rem` type.
+
+#### style: `CSSProperties`
+
+> default: `undefined`
+
+Inline styles on the car element.
+
+#### isButton: `boolean`
+
+> default: `true`
+
+When `false`, renders a `div` instead of a `button`. Use this for display-only status cars, not for selectable cars.
+
+#### isActive: `boolean`
+
+> default: `false`
+
+Force this car active. ORed with the rail’s active index, so a car can appear active even when it is not the selected index.
+
+#### hasHoverEffect: `boolean`
+
+> default: `false`
+
+Apply the active background while this car is hovered, without selecting it.
+
+#### onClick: `(index: number) => void`
+
+> default: `undefined`
+
+Called when the car is clicked in controlled mode. The parent should update `activeIndex` from this handler. Cars with `isButton={false}` do not fire `onClick`.
+
+> In uncontrolled mode the rail updates selection internally and calls `onActiveIndexChange` on `<Monorail />` instead. `onClick` is not called.
+
+#### disableTransitions: `boolean`
+
+> default: inherited from `<Monorail />`
+
+Override the rail transition setting for this car.
+
+#### activeClassName: `string`
+
+> default: `undefined`
+
+Extra classes when the car is active or hover-highlighted (`hasHoverEffect`).
+
+#### contentClassName: `string`
+
+> default: `undefined`
+
+Classes on the animated width wrapper.
+
+#### iconClassName: `string`
+
+> default: `undefined`
+
+Classes on the icon wrapper.
+
+#### childrenWrapperClassName: `string`
+
+> default: `undefined`
+
+Classes on the label wrapper. You can also hide labels with CSS, for example `[[data-active=false][data-hovered=false]_&]:hidden`.
+
+## Controlled vs Uncontrolled mode
+
+react-monorail has two different modes it can operate in, which change how much you need to take care of the state yourself.
+
+### Uncontrolled mode
+
+This is the default mode and makes the monorail handle its state internally. You can change the starting car with `initialActiveIndex` and you can listen for changes with `onActiveIndexChange`.
+
+```js
+<Monorail initialActiveIndex={1} onActiveIndexChange={(index) => console.log(index)}>
+  <MonorailCar>{() => "Title 1"}</MonorailCar>
+  <MonorailCar>{() => "Title 2"}</MonorailCar>
+</Monorail>
+```
+
+### Controlled mode
+
+This mode has to be enabled by supplying `activeIndex` to the `<Monorail />` component.
+
+In this mode react-monorail does not handle any car selection internally and leaves all the state management up to the outer application. Pass `onClick` on cars that should change the selection. Cars with `isButton={false}` are display-only. Pass `activeIndex={-1}` for none selected.
+
+`initialActiveIndex` does not have any effect in this mode.
+
+```js
+const App = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  return (
+    <Monorail activeIndex={activeIndex}>
+      <MonorailCar onClick={setActiveIndex}>{() => "Title 1"}</MonorailCar>
+      <MonorailCar onClick={setActiveIndex}>{() => "Title 2"}</MonorailCar>
+    </Monorail>
+  );
+};
+```
+
+## Styling
+
+Styles ship with the component. Importing `Monorail` loads the stylesheet (including [augmented-ui](https://augmented-ui.com/) clip shapes) — no extra CSS import or Tailwind setup is required.
+
+You can still pass `className` from your own CSS or Tailwind (`h-[38px]`, `text-sm`, …).
+
+### CSS variables
+
+Tokens are space-separated RGB channels so they work with `rgb(var(--monorail-bg))` and alpha values:
+
+| Token | Default | Role |
+| --- | --- | --- |
+| `--monorail-bg` | `156 156 156` | Inactive car background |
+| `--monorail-text` | `255 255 255` | Inactive car text |
+| `--monorail-active-bg` | `218 255 0` | Active car background |
+| `--monorail-active-text` | `0 0 0` | Active car text |
+| `--monorail-car-height` | `28px` | Car height |
+| `--monorail-car-font-size` | `0.75rem` | Car type size |
+| `--monorail-car-line-height` | `1rem` | Car line height |
+
+Override them on the rail or a car:
+
+```js
+<Monorail
+  style={
+    {
+      "--monorail-active-bg": "51 176 255",
+      "--monorail-text": "218 255 0",
+    } as CSSProperties
+  }
+>
+  <MonorailCar>{() => "Override"}</MonorailCar>
+  <MonorailCar>{() => "Active"}</MonorailCar>
+</Monorail>
+```
+
+### Size
+
+Default car height is `28px` with `0.75rem` type. Override with `className` on each car (`h-[38px] text-sm`, `h-[50px]`, …) or with `--monorail-car-height` / `--monorail-car-font-size`. Right-side clip insets scale from the measured height.
+
+### Custom content
+
+Use the render function and `className` / `icon` / `activeClassName` to vary a car’s content and look. See `demo/Gallery.tsx` for hover-to-reveal, icons, status-only rails, and trailing actions.
 
 ## Accessibility
 
@@ -146,14 +288,6 @@ npm run build    # ESM + types via tsup
 
 `npm run format` applies Biome fixes.
 
-## Architecture
-
-- **Direct children + `cloneElement`.** `Monorail` injects `index`, `totalItems`, and control props. Nested wrappers around `MonorailCar` will not receive those props.
-- **Jotai per rail.** Each `Monorail` mounts a Jotai `Provider` so hover and selection state stay local. `ActiveIndexUpdater` (inside the provider) is what syncs `activeIndex` / `initialActiveIndex` into that store.
-- **Measured width.** `MonorailContent` keeps an off-flow `w-max` row, observes it with `ResizeObserver`, and animates the outer width with Motion so labels can appear and disappear without jumping.
-- **Clipped overlaps.** Adjacent cars use `data-augmented-ui` mixins (`tr-clip-y`, `l-clip-y`, rounded corners on the ends) plus `--aug-*` CSS variables. Right-side clip insets scale from the car’s measured height (28px base). The first/middle/last/single variants are driven by CVA.
-- **Tailwind classes in source.** The package ships `--monorail-bg`, `--monorail-text`, `--monorail-active-bg`, and `--monorail-active-text`, plus a small Tailwind preset. Host apps must scan the package source so those utilities are generated.
-
 ## License
 
-MIT. See [LICENSE](./LICENSE).
+MIT

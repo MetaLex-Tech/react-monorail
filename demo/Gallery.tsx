@@ -29,13 +29,13 @@ export function Gallery() {
         title="Hover to reveal"
       >
         <Monorail>
-          <MonorailCar isButton={false}>{() => "Phases"}</MonorailCar>
+          <MonorailCar isActive isButton={false}>{() => "Phases"}</MonorailCar>
           <MonorailCar icon={<Settings2 size={14} />}>
             {(itemState) =>
               (itemState.isActive || itemState.isHovered) && "Design"
             }
           </MonorailCar>
-          <MonorailCar icon={<Rocket size={14} />}>
+          <MonorailCar icon={<FileText size={14} />}>
             {(itemState) =>
               (itemState.isActive || itemState.isHovered) && "Build"
             }
@@ -230,11 +230,7 @@ function StatusRail({
   return (
     <Monorail
       activeIndex={-1}
-      className={
-        blocked
-          ? "[--monorail-active-bg:51_176_255]"
-          : undefined
-      }
+      className={blocked ? "[--monorail-active-bg:51_176_255]" : undefined}
     >
       {steps.map((step) => {
         const isDone = activeSteps.includes(step.key);

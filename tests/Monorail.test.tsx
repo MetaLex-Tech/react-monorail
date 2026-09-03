@@ -156,15 +156,14 @@ describe("Monorail", () => {
     ).toBeInTheDocument();
   });
 
-  it("defaults to 28px height and xs type", () => {
+  it("defaults to the monorail-car class", () => {
     const { container } = render(
       <Monorail>
         <MonorailCar>{() => "Car"}</MonorailCar>
       </Monorail>,
     );
 
-    expect(railButtons(container)[0].className).toContain("h-[28px]");
-    expect(railButtons(container)[0].className).toContain("text-xs");
+    expect(railButtons(container)[0].className).toContain("monorail-car");
   });
 
   it("defaults colors to the --monorail-* tokens", () => {
@@ -176,12 +175,8 @@ describe("Monorail", () => {
     );
 
     const [active, inactive] = railButtons(container);
-    expect(active.className).toContain("bg-[rgb(var(--monorail-active-bg))]");
-    expect(active.className).toContain(
-      "text-[rgb(var(--monorail-active-text))]",
-    );
-    expect(inactive.className).toContain("bg-[rgb(var(--monorail-bg))]");
-    expect(inactive.className).toContain("text-[rgb(var(--monorail-text))]");
+    expect(active.className).toContain("monorail-car--active");
+    expect(inactive.className).not.toContain("monorail-car--active");
   });
 
   it("lets className override height and type size", () => {
@@ -193,7 +188,6 @@ describe("Monorail", () => {
 
     expect(railButtons(container)[0].className).toContain("h-[38px]");
     expect(railButtons(container)[0].className).toContain("text-sm");
-    expect(railButtons(container)[0].className).not.toContain("h-[28px]");
   });
 
   it("sets augmented-ui mixins for first, middle, last, and single cars", () => {

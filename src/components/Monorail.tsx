@@ -84,10 +84,7 @@ export const Monorail: React.FC<MonorailProps> = ({
 
   return (
     <Provider>
-      <div
-        className={cn("monorail flex flex-row items-center gap-0.5", className)}
-        style={style}
-      >
+      <div className={cn("monorail", className)} style={style}>
         {childrenWithIndices}
       </div>
       {(controlledActiveIndex != null || defaultActiveIndex != null) && (
@@ -166,58 +163,31 @@ export function augRightClipVars(heightPx: number): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-const monorailCarVariants = cva(
-  cn(
-    "relative appearance-none min-w-4 px-2 py-[1px]",
-    "-ml-1.5 pl-[14px]",
-    "h-[28px] text-xs",
-    "bg-[rgb(var(--monorail-bg))] text-[rgb(var(--monorail-text))]",
-    "[--aug-border-all:2px] [--aug-border-bg:rgb(var(--monorail-bg))]",
-  ),
-  {
-    variants: {
-      transitions: {
-        true: "transition-colors",
-      },
-      hasIcon: {
-        true: "",
-        false: "",
-      },
-      position: {
-        middle: "",
-        first:
-          "rounded-l-[4px] pr-[4px] ml-0 pl-[8px] [--aug-tl1:4px] [--aug-bl1:4px]",
-        last: "rounded-r-[4px] pr-[6px] [--aug-tr1:4px] [--aug-br1:4px]",
-        single: "rounded-[4px] pr-[0px] pl-[8px] ml-0",
-      },
-      active: {
-        true: "bg-[rgb(var(--monorail-active-bg))] [--aug-border-bg:rgb(var(--monorail-active-bg))] text-[rgb(var(--monorail-active-text))]",
-      },
+const monorailCarVariants = cva("monorail-car", {
+  variants: {
+    transitions: {
+      true: "monorail-car--transitions",
     },
-    compoundVariants: [
-      {
-        hasIcon: true,
-        position: ["first", "single"],
-        className: "!pl-0.5",
-      },
-      {
-        hasIcon: true,
-        position: ["last", "middle"],
-        className: "!pl-2",
-      },
-      {
-        position: ["last", "middle"],
-        className:
-          "[--aug-l1-width:6px] [--aug-l2-width:6px] [--aug-l1-height:5px] [--aug-l2-height:5px] [--aug-l-extend1:12px]",
-      },
-    ],
-    defaultVariants: {
-      position: "middle",
-      active: false,
-      hasIcon: false,
+    hasIcon: {
+      true: "monorail-car--has-icon",
+      false: "",
+    },
+    position: {
+      middle: "monorail-car--middle",
+      first: "monorail-car--first",
+      last: "monorail-car--last",
+      single: "monorail-car--single",
+    },
+    active: {
+      true: "monorail-car--active",
     },
   },
-);
+  defaultVariants: {
+    position: "middle",
+    active: false,
+    hasIcon: false,
+  },
+});
 
 export const MonorailCar = forwardRef<
   HTMLDivElement | HTMLButtonElement,
@@ -321,16 +291,18 @@ export const MonorailCar = forwardRef<
       onActiveIndexChange?.(index!);
     };
 
+    const isHighlighted =
+      itemState.isActive || (hasHoverEffect && itemState.isHovered);
+
     const elementProps: ElementProps = {
       className: cn(
         monorailCarVariants({
           position,
           hasIcon,
-          active: itemState.isActive || (hasHoverEffect && itemState.isHovered),
-          [`${activeClassName}`]:
-            itemState.isActive || (hasHoverEffect && itemState.isHovered),
+          active: isHighlighted,
           transitions: !disableTransitions,
         }),
+        isHighlighted && activeClassName,
         className,
       ),
       "data-augmented-ui": `
@@ -433,26 +405,20 @@ const MonorailContent: FC<PropsWithChildren<MonorailContentProps>> = ({
         animate: { width: width === undefined ? "auto" : width },
       })}
       className={cn(
-        "flex overflow-hidden h-full",
-        { "w-fit": disableTransitions },
+        "monorail-car__content",
+        disableTransitions && "monorail-car__content--static",
         className,
       )}
     >
       {/* This div is just used to measure the dynamic contents */}
-      <div
-        ref={measureRef}
-        className="flex w-max shrink-0 items-center gap-1 whitespace-nowrap"
-      >
+      <div ref={measureRef} className="monorail-car__measure">
         {icon && (
           <div
-            className={cn([
-              "flex items-center justify-center w-6 h-6 rounded-[4px] overflow-hidden",
-              {
-                "bg-gradient-to-r from-[rgba(var(--monorail-text)/0.11)] to-[rgba(var(--monorail-text)/0)]":
-                  isActive && isFirst,
-              },
+            className={cn(
+              "monorail-car__icon",
+              isActive && isFirst && "monorail-car__icon--lead",
               iconClassName,
-            ])}
+            )}
           >
             {icon}
           </div>
@@ -461,12 +427,7 @@ const MonorailContent: FC<PropsWithChildren<MonorailContentProps>> = ({
         {children ? (
           // This just adds additional space to the right when there are
           // children, allowing empty items to be smaller.
-          <div
-            className={cn(
-              "mr-2 flex items-center h-full",
-              childrenWrapperClassName,
-            )}
-          >
+          <div className={cn("monorail-car__label", childrenWrapperClassName)}>
             {children}
           </div>
         ) : null}

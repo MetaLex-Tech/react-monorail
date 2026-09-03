@@ -1,8 +1,138 @@
-@import "augmented-ui/augmented-ui.min.css";
-
 :root {
   --monorail-bg: 156 156 156;
   --monorail-text: 255 255 255;
   --monorail-active-bg: 218 255 0;
   --monorail-active-text: 0 0 0;
+}
+
+.monorail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: var(--monorail-car-font-size, 0.75rem);
+  line-height: var(--monorail-car-line-height, 1rem);
+}
+
+.monorail .monorail-car {
+  position: relative;
+  box-sizing: border-box;
+  appearance: none;
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 1rem;
+  height: var(--monorail-car-height, 28px);
+  margin: 0 0 0 -0.375rem;
+  padding: 1px 8px 1px 14px;
+  border: 0;
+  font-family: inherit;
+  background-color: rgb(var(--monorail-bg));
+  color: rgb(var(--monorail-text));
+  --aug-border-all: 2px;
+  --aug-border-bg: rgb(var(--monorail-bg));
+}
+
+.monorail button.monorail-car {
+  cursor: pointer;
+}
+
+.monorail .monorail-car--transitions {
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.monorail .monorail-car--first {
+  margin-left: 0;
+  padding-left: 8px;
+  padding-right: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  --aug-tl1: 4px;
+  --aug-bl1: 4px;
+}
+
+.monorail .monorail-car--last {
+  padding-right: 6px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  --aug-tr1: 4px;
+  --aug-br1: 4px;
+}
+
+.monorail .monorail-car--single {
+  margin-left: 0;
+  padding-left: 8px;
+  padding-right: 0;
+  border-radius: 4px;
+}
+
+.monorail .monorail-car--middle,
+.monorail .monorail-car--last {
+  --aug-l1-width: 6px;
+  --aug-l2-width: 6px;
+  --aug-l1-height: 5px;
+  --aug-l2-height: 5px;
+  --aug-l-extend1: 12px;
+}
+
+.monorail .monorail-car--first.monorail-car--has-icon,
+.monorail .monorail-car--single.monorail-car--has-icon {
+  padding-left: 0.125rem;
+}
+
+.monorail .monorail-car--last.monorail-car--has-icon,
+.monorail .monorail-car--middle.monorail-car--has-icon {
+  padding-left: 0.5rem;
+}
+
+.monorail .monorail-car--active {
+  background-color: rgb(var(--monorail-active-bg));
+  color: rgb(var(--monorail-active-text));
+  --aug-border-bg: rgb(var(--monorail-active-bg));
+}
+
+.monorail .monorail-car__content {
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+
+.monorail .monorail-car__content--static {
+  width: fit-content;
+}
+
+.monorail .monorail-car__measure {
+  display: flex;
+  width: max-content;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.monorail .monorail-car__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.monorail .monorail-car__icon--lead {
+  background-image: linear-gradient(
+    to right,
+    rgb(var(--monorail-text) / 0.11),
+    rgb(var(--monorail-text) / 0)
+  );
+}
+
+.monorail .monorail-car__label {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-right: 0.5rem;
 }
