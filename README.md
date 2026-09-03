@@ -6,6 +6,10 @@ A segmented, overlapping rail of expandable cars for React. The active car grows
 
 Monorail is for compact step indicators, phase selectors, and status strips where several items share one row and only one (or none) should take up space.
 
+## Demo
+
+Try it on [CodeSandbox](https://codesandbox.io/p/devbox/peaceful-lovelace-n8jwdg?workspaceId=ws_Rny9Pbwfw8iG8u12AY1WKy).
+
 ## Installing
 
 ```bash
@@ -39,8 +43,6 @@ export default () => (
   </Monorail>
 );
 ```
-
-## Demo
 
 ```bash
 npm install
