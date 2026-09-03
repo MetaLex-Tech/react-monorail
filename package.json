@@ -1,6 +1,6 @@
 {
   "name": "react-monorail",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A segmented, overlapping rail of expandable cars for React. Click, hover, and watch inactive cars collapse while the active one grows.",
   "keywords": [
     "react",
