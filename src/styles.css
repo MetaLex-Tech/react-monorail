@@ -1,8 +1,8 @@
 :root {
-  --monorail-bg: 156 156 156;
-  --monorail-text: 255 255 255;
-  --monorail-active-bg: 218 255 0;
-  --monorail-active-text: 0 0 0;
+  --monorail-bg: #9c9c9c;
+  --monorail-text: #ffffff;
+  --monorail-active-bg: #daff00;
+  --monorail-active-text: #000000;
 }
 
 .monorail {
@@ -26,10 +26,10 @@
   padding: 1px 8px 1px 14px;
   border: 0;
   font-family: inherit;
-  background-color: rgb(var(--monorail-bg));
-  color: rgb(var(--monorail-text));
+  background-color: var(--monorail-bg);
+  color: var(--monorail-text);
   --aug-border-all: 2px;
-  --aug-border-bg: rgb(var(--monorail-bg));
+  --aug-border-bg: var(--monorail-bg);
 }
 
 .monorail button.monorail-car {
@@ -88,9 +88,9 @@
 }
 
 .monorail .monorail-car--active {
-  background-color: rgb(var(--monorail-active-bg));
-  color: rgb(var(--monorail-active-text));
-  --aug-border-bg: rgb(var(--monorail-active-bg));
+  background-color: var(--monorail-active-bg);
+  color: var(--monorail-active-text);
+  --aug-border-bg: var(--monorail-active-bg);
 }
 
 .monorail .monorail-car__content {
@@ -125,8 +125,8 @@
 .monorail .monorail-car__icon--lead {
   background-image: linear-gradient(
     to right,
-    rgb(var(--monorail-text) / 0.11),
-    rgb(var(--monorail-text) / 0)
+    rgb(from var(--monorail-text) r g b / 0.11),
+    rgb(from var(--monorail-text) r g b / 0)
   );
 }
 

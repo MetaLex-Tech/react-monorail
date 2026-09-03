@@ -117,18 +117,14 @@ export function Gallery() {
       </GallerySection>
 
       <GallerySection
-        description="Override tokens with CSS or Tailwind. Default vs [--monorail-active-bg:51_176_255]."
+        description="Override tokens with CSS or Tailwind."
         title="Color"
       >
-        <Monorail>
-          <MonorailCar>{() => "Default"}</MonorailCar>
-          <MonorailCar>{() => "Active"}</MonorailCar>
-        </Monorail>
         <Monorail
           style={
             {
-              "--monorail-active-bg": "51 176 255",
-              "--monorail-text": "218 255 0",
+              "--monorail-active-bg": "#33b0ff",
+              "--monorail-text": "#daff00",
             } as CSSProperties
           }
         >
@@ -230,7 +226,7 @@ function StatusRail({
   return (
     <Monorail
       activeIndex={-1}
-      className={blocked ? "[--monorail-active-bg:51_176_255]" : undefined}
+      className="[--monorail-active-bg:#33b0ff]"
     >
       {steps.map((step) => {
         const isDone = activeSteps.includes(step.key);

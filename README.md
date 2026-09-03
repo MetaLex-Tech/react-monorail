@@ -1,10 +1,12 @@
 # react-monorail [![npm version](https://img.shields.io/npm/v/react-monorail.svg)](https://www.npmjs.com/package/react-monorail)
 
+<video src="./demo.webm" width="400" autoplay loop muted playsinline>
+  <a href="./demo.webm">Watch the demo</a>
+</video>
+
 A segmented, overlapping rail of expandable cars for React. The active car grows to show its content; inactive cars collapse to an icon or a sliver. Hover previews a collapsed car without committing to it.
 
 Monorail is for compact step indicators, phase selectors, and status strips where several items share one row and only one (or none) should take up space.
-
-![Monorail demo](./demo/screenshot.png)
 
 ## Installing
 
@@ -233,14 +235,14 @@ You can still pass `className` from your own CSS or Tailwind (`h-[38px]`, `text-
 
 ### CSS variables
 
-Tokens are space-separated RGB channels so they work with `rgb(var(--monorail-bg))` and alpha values:
+Tokens are hex, `rgb()`, or `rgba()` color values:
 
 | Token | Default | Role |
 | --- | --- | --- |
-| `--monorail-bg` | `156 156 156` | Inactive car background |
-| `--monorail-text` | `255 255 255` | Inactive car text |
-| `--monorail-active-bg` | `218 255 0` | Active car background |
-| `--monorail-active-text` | `0 0 0` | Active car text |
+| `--monorail-bg` | `#9c9c9c` | Inactive car background |
+| `--monorail-text` | `#ffffff` | Inactive car text |
+| `--monorail-active-bg` | `#daff00` | Active car background |
+| `--monorail-active-text` | `#000000` | Active car text |
 | `--monorail-car-height` | `28px` | Car height |
 | `--monorail-car-font-size` | `0.75rem` | Car type size |
 | `--monorail-car-line-height` | `1rem` | Car line height |
@@ -251,8 +253,8 @@ Override them on the rail or a car:
 <Monorail
   style={
     {
-      "--monorail-active-bg": "51 176 255",
-      "--monorail-text": "218 255 0",
+      "--monorail-active-bg": "#33b0ff",
+      "--monorail-text": "#daff00",
     } as CSSProperties
   }
 >

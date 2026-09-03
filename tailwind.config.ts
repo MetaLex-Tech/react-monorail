@@ -16,10 +16,11 @@ const config: Config = {
     extend: {
       colors: {
         monorail: {
-          bg: "rgb(var(--monorail-bg) / <alpha-value>)",
-          text: "rgb(var(--monorail-text) / <alpha-value>)",
-          "active-bg": "rgb(var(--monorail-active-bg) / <alpha-value>)",
-          "active-text": "rgb(var(--monorail-active-text) / <alpha-value>)",
+          bg: "rgb(from var(--monorail-bg) r g b / <alpha-value>)",
+          text: "rgb(from var(--monorail-text) r g b / <alpha-value>)",
+          "active-bg": "rgb(from var(--monorail-active-bg) r g b / <alpha-value>)",
+          "active-text":
+            "rgb(from var(--monorail-active-text) r g b / <alpha-value>)",
         },
       },
     },
